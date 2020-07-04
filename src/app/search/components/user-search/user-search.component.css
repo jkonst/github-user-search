@@ -1,5 +1,5 @@
 .search-wrapper {
-    height: 80vh;
+    height: 100%;
     margin: 0 auto;
 }
 
@@ -14,4 +14,11 @@
 
 .search-bar {
     margin-top: 20px;
+}
+
+.search-results {
+    background-color: beige;
+    padding-top: 200px;
+    padding-bottom: 200px;
+    min-height: 800px;
 }

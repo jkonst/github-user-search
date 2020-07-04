@@ -1,0 +1,11 @@
+<div class="search-wrapper">
+    <div class="search-input-wrapper">
+        <mat-form-field class="search-bar" floatLabel="never" color="primary">
+            <input placeholder="search by github login" matInput #searchInput autocomplete="off">
+        </mat-form-field>
+    </div>
+    <div class="search-results">
+        <app-user-list [results]="users$ | async">
+        </app-user-list>
+    </div>
+</div>

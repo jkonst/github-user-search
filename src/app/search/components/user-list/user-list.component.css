@@ -1,0 +1,43 @@
+.results-card {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: white;
+}
+
+.header-image {
+    background-image: url(../../../../assets/github.png);
+    background-size: cover;
+}
+
+.users-table {
+    width: 100%;
+}
+
+.mat-card-title {
+    font-size: x-large;
+}
+
+.mat-header-cell {
+    font-size: 16px;
+}
+
+mat-table tr {
+    display: flex;
+}
+
+mat-table td {
+    display: flex;
+}
+
+.mat-header-cell, .mat-cell {
+    width: 30%;
+    vertical-align: middle;
+    word-break: break-word;
+    font-size: 1vh;
+}
+
+.mat-column-identifier {
+    width: 100%;
+    text-align: left;
+}

@@ -1,6 +1,8 @@
 footer {
-    height: 18vh;
+    height: 32vh;
     background-color: dimgray;
+    display: flex;
+    padding: 10px;
 }
 .container .text-right{
     font-size: 16px;
