@@ -1,0 +1,17 @@
+.search-wrapper {
+    height: 80vh;
+    margin: 0 auto;
+}
+
+.search-input-wrapper {
+    text-align: center;
+}
+
+.mat-input-element {
+    border-bottom: 1px solid;
+    border-color: blue;
+}
+
+.search-bar {
+    margin-top: 20px;
+}
