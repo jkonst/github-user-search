@@ -24,10 +24,8 @@ export class UserSearchService {
   }
 
   search(term: string, pageParam?: string) {
-    const baseUrl =
-      !pageParam || pageParam === ''
-        ? `https://api.github.com/search/users?q=${term}&page=1`
-        : `https://api.github.com/search/users?q=${term}&page=${pageParam}`;
+    const pageNo = !pageParam || pageParam === '' ? '1' : pageParam;
+    const baseUrl = `https://api.github.com/search/users?q=${term}&page=${pageNo}`;
     if (this.existsInCache(term, baseUrl)) {
       console.log('cache');
       this.pageResultSubject.next(this.resultsCache[baseUrl]);
