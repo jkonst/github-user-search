@@ -1,6 +1,8 @@
 import { GitHubUser } from './user';
 
 export class GitHubUserProfile extends GitHubUser {
+    htmlUrl: string;
+    avatarUrl: string;
     name: string;
     company: string;
     location: string;
@@ -8,4 +10,5 @@ export class GitHubUserProfile extends GitHubUser {
     following: string;
     blog: string;
     bio: string;
+    repos: string;
 }

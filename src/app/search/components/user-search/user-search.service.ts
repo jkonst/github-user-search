@@ -4,6 +4,7 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { GitHubUser } from '../../models/user';
 import { PageResult } from '../../models/pageResults';
+import { UserProfileService } from '../user-profile/user-profile.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,30 +18,27 @@ export class UserSearchService {
   });
   pageResult$: Observable<PageResult> = this.pageResultSubject.asObservable();
 
-  resultsCache: { [key: string]: PageResult };
+  private resultsCache: { [key: string]: PageResult };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private userProfileService: UserProfileService) {
     this.resultsCache = {};
   }
 
   search(term: string, pageParam?: string) {
     const pageNo = !pageParam || pageParam === '' ? '1' : pageParam;
-    const baseUrl = `https://api.github.com/search/users?q=${term}&page=${pageNo}`;
+    const baseUrl = `https://api.github.com/search/users?q=${term}&per_page=3&page=${pageNo}`;
     if (this.existsInCache(term, baseUrl)) {
-      console.log('cache');
       this.pageResultSubject.next(this.resultsCache[baseUrl]);
     } else {
-      console.log('http request');
       this.makeRequest(term, baseUrl);
     }
   }
 
   private existsInCache(term: string, url: string): boolean {
-    console.log(this.resultsCache);
     // clear cache when searching different terms
     if (!this.resultsCache[url] && !this.cacheContainsTerm(term)) {
-      console.log('clear cache');
       this.resultsCache = {};
+      this.userProfileService.clearCache();
     }
     return !!this.resultsCache[url];
   }
@@ -66,7 +64,6 @@ export class UserSearchService {
             totalCount > 0 && res.headers.get('Link')
               ? this.parseLinkHeader(res.headers.get('Link'))
               : '';
-          console.log(link);
           const items = res['body']['items'].map((i) =>
             this.constructGithubUser(i)
           ) as GitHubUser[];
@@ -86,9 +83,7 @@ export class UserSearchService {
 
   private constructGithubUser(item): GitHubUser {
     return {
-      login: item.login,
-      avatarUrl: item.avatar_url,
-      htmlUrl: item.html_url,
+      login: item.login
     };
   }
 

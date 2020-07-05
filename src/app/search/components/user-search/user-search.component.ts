@@ -17,7 +17,6 @@ export class UserSearchComponent {
 
   searchUser() {
     const searchTerm = this.input.nativeElement.value;
-    console.log(searchTerm);
     this.searchService.search(searchTerm);
   }
 

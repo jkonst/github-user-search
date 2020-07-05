@@ -18,23 +18,26 @@
     font-size: x-large;
 }
 
-.mat-header-cell {
-    font-size: 16px;
-}
-
-mat-table tr {
+mat-table tr:not(.mat-header-row) {
     display: flex;
+    height: 330px;
 }
 
 mat-table td {
     display: flex;
+    width: 100%;
 }
 
 .mat-header-cell, .mat-cell {
-    width: 30%;
     vertical-align: middle;
     word-break: break-word;
     font-size: 1vh;
+}
+
+.mat-header-cell {
+    width: 10%;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .mat-column-identifier {

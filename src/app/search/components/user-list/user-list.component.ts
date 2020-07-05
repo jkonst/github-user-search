@@ -17,7 +17,7 @@ export class UserListComponent implements OnInit {
   private readonly destroy$ = new Subject();
   pageResult$: Observable<PageResult>;
   dataSource: MatTableDataSource<GitHubUser>;
-  displayedColumns: string[] = ['login', 'avatarUrl', 'htmlUrl'];
+  displayedColumns: string[] = ['login'];
   totalResults = 0;
   index = 0;
   searchTerm = '';
