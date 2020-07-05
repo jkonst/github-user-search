@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { GitHubUser } from './models/user';
-import { PageResult } from './models/pageResults';
+import { GitHubUser } from '../../models/user';
+import { PageResult } from '../../models/pageResults';
 
 @Injectable({
   providedIn: 'root',

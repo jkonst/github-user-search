@@ -9,9 +9,10 @@ import { UserSearchComponent } from './components/user-search/user-search.compon
 import { MatCardModule } from '@angular/material/card';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { HttpClientModule } from '@angular/common/http';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 @NgModule({
-  declarations: [UserSearchComponent, UserListComponent],
+  declarations: [UserSearchComponent, UserListComponent, UserProfileComponent],
   imports: [
     CommonModule,
     MatCardModule,

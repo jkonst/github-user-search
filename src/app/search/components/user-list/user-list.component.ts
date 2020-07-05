@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
 import { PageResult } from '../../models/pageResults';
 import { Observable, Subject } from 'rxjs';
-import { UserSearchService } from '../../user-search.service';
+import { UserSearchService } from '../user-search/user-search.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
