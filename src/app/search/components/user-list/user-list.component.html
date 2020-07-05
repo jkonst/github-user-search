@@ -2,7 +2,7 @@
     <mat-card-header>
         <div mat-card-avatar class="header-image"></div>
         <mat-card-title *ngIf="!(pageResult$ | async) || (pageResult$ | async).users.length === 0">...No users found</mat-card-title>
-        <mat-card-title *ngIf="(pageResult$ | async) && (pageResult$ | async).users.length > 0">...Users are found below</mat-card-title>
+        <mat-card-title *ngIf="(pageResult$ | async) && (pageResult$ | async).users.length > 0">{{'Found totally '}} {{(pageResult$ | async).totalResults}} {{' users'}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
         <ng-container *ngIf="(pageResult$ | async) && (pageResult$ | async).users.length >= 1" class="mat-elevation-z8">

@@ -1,9 +1,9 @@
 <div class="search-wrapper">
     <div class="search-input-wrapper">
         <mat-form-field class="search-bar" floatLabel="never" color="primary">
-            <input placeholder="search by github login" matInput #searchInput autocomplete="off">
+            <input placeholder="search a user in github" matInput #searchInput autocomplete="off">
         </mat-form-field>
-        <button type="button" class="btn btn-outline-secondary" (click)="searchUser()" [disabled]="!isInputLongEnough()">Search</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="searchUser()" [disabled]="!isInputLongEnough()" title="search term must be over 3 characters">Search</button>
     </div>
     <div class="search-results">
         <app-user-list>

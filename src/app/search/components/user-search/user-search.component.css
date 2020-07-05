@@ -26,3 +26,7 @@
     padding-bottom: 200px;
     min-height: 800px;
 }
+
+.mat-input-element {
+    border-bottom: none;
+}
