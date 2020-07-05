@@ -1,11 +1,11 @@
 <mat-card class="results-card">
     <mat-card-header>
         <div mat-card-avatar class="header-image"></div>
-        <mat-card-title *ngIf="!results || results.length === 0">...No users found</mat-card-title>
-        <mat-card-title *ngIf="results && results.length > 0">...Users are found below</mat-card-title>
+        <mat-card-title *ngIf="!(pageResult$ | async) || (pageResult$ | async).users.length === 0">...No users found</mat-card-title>
+        <mat-card-title *ngIf="(pageResult$ | async) && (pageResult$ | async).users.length > 0">...Users are found below</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <ng-container *ngIf="results && results.length >= 1" class="mat-elevation-z8">
+        <ng-container *ngIf="(pageResult$ | async) && (pageResult$ | async).users.length >= 1" class="mat-elevation-z8">
             <mat-table [dataSource]="dataSource" matSort class="users-table">
           
               <ng-container matColumnDef="login">
@@ -27,6 +27,13 @@
               <tr mat-row *matRowDef="let row; columns: displayedColumns;">
               </tr>
             </mat-table>
+            <mat-paginator #paginator
+                [length]="totalResults"
+                [pageIndex]="index"
+                [pageSize]=30
+                (page)="getDifferentPage($event)"
+            >
+            </mat-paginator>
         </ng-container>
     </mat-card-content>
 </mat-card>

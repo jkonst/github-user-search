@@ -3,9 +3,10 @@
         <mat-form-field class="search-bar" floatLabel="never" color="primary">
             <input placeholder="search by github login" matInput #searchInput autocomplete="off">
         </mat-form-field>
+        <button type="button" class="btn btn-outline-secondary" (click)="searchUser()" [disabled]="!isInputLongEnough()">Search</button>
     </div>
     <div class="search-results">
-        <app-user-list [results]="users$ | async">
+        <app-user-list>
         </app-user-list>
     </div>
 </div>

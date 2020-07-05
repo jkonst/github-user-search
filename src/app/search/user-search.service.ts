@@ -1,33 +1,64 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { GitHubUser } from './models/user';
+import { PageResult } from './models/pageResults';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserSearchService {
+  private pageResultSubject = new BehaviorSubject<PageResult>({ users: [], searchTerm: '', totalResults: 0, index: 0});
+  pageResult$: Observable<PageResult> = this.pageResultSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
-  search(login: string): Observable<GitHubUser[]> {
-    return this.http
-      .get(`https://api.github.com/search/users?q=${login}`, {
+  search(term: string, pageParam?: string) {
+    const baseUrl = !pageParam || pageParam === '' ? `https://api.github.com/search/users?q=${term}`
+    : `https://api.github.com/search/users?q=${term}&page=${pageParam}`;
+    this.http
+      .get(baseUrl, {
         observe: 'response',
       })
       .pipe(
         catchError((err) => {
-          return throwError(err);
+            console.log(err);
+            return throwError(err);
         }),
         map((res) => {
-          console.log(res['body']);
           const totalCount = res['body']['total_count'];
           const link = totalCount > 0 && res.headers.get('Link') ? this.parseLinkHeader(res.headers.get('Link')) : '';
           console.log(link);
-          const items = res['body']['items'].map(i => ({login: i.login, avatarUrl: i.avatar_url, htmlUrl: i.html_url})) as GitHubUser[];
-          return items;
+          const items = res['body']['items'].map(i => this.constructGithubUser(i)) as GitHubUser[];
+          return {
+              users: items,
+              totalResults: totalCount,
+              searchTerm: term,
+              index: this.findCurrentPageIdx(link)
+          };
         })
-      );
+      ).subscribe(pr => this.pageResultSubject.next(pr));
+  }
+
+  private constructGithubUser(item): GitHubUser {
+      return {
+          login: item.login,
+          avatarUrl: item.avatar_url,
+          htmlUrl: item.html_url
+      };
+  }
+
+  private findCurrentPageIdx(link): number {
+    if (link === '') {
+      return 1;
+    } else {
+      if (link['next']) {
+        return +link['next'].substring(link['next'].indexOf('page=') + 'page='.length) - 1;
+      } else { // last page
+        return +link['prev'].substring(link['prev'].indexOf('page=') + 'page='.length) + 1;
+      }
+    }
   }
 
   private parseLinkHeader(header) {

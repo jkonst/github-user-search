@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.search-input-wrapper button {
+    margin-left: 10px;
+}
+
 .mat-input-element {
     border-bottom: 1px solid;
     border-color: blue;
