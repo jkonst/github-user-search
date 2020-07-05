@@ -9,44 +9,89 @@ import { PageResult } from './models/pageResults';
   providedIn: 'root',
 })
 export class UserSearchService {
-  private pageResultSubject = new BehaviorSubject<PageResult>({ users: [], searchTerm: '', totalResults: 0, index: 0});
+  private pageResultSubject = new BehaviorSubject<PageResult>({
+    users: [],
+    searchTerm: '',
+    totalResults: 0,
+    index: 0,
+  });
   pageResult$: Observable<PageResult> = this.pageResultSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  resultsCache: { [key: string]: PageResult };
+
+  constructor(private http: HttpClient) {
+    this.resultsCache = {};
+  }
 
   search(term: string, pageParam?: string) {
-    const baseUrl = !pageParam || pageParam === '' ? `https://api.github.com/search/users?q=${term}`
-    : `https://api.github.com/search/users?q=${term}&page=${pageParam}`;
+    const baseUrl =
+      !pageParam || pageParam === ''
+        ? `https://api.github.com/search/users?q=${term}&page=1`
+        : `https://api.github.com/search/users?q=${term}&page=${pageParam}`;
+    if (this.existsInCache(term, baseUrl)) {
+      console.log('cache');
+      this.pageResultSubject.next(this.resultsCache[baseUrl]);
+    } else {
+      console.log('http request');
+      this.makeRequest(term, baseUrl);
+    }
+  }
+
+  private existsInCache(term: string, url: string): boolean {
+    console.log(this.resultsCache);
+    // clear cache when searching different terms
+    if (!this.resultsCache[url] && !this.cacheContainsTerm(term)) {
+      console.log('clear cache');
+      this.resultsCache = {};
+    }
+    return !!this.resultsCache[url];
+  }
+
+  private cacheContainsTerm(term: string): boolean {
+    const searchParam = `q=${term}`;
+    return Object.keys(this.resultsCache).filter(k => k.indexOf(searchParam) > -1).length > 0;
+  }
+
+  private makeRequest(term: string, url: string) {
     this.http
-      .get(baseUrl, {
+      .get(url, {
         observe: 'response',
       })
       .pipe(
         catchError((err) => {
-            console.log(err);
-            return throwError(err);
+          console.log(err);
+          return throwError(err);
         }),
         map((res) => {
           const totalCount = res['body']['total_count'];
-          const link = totalCount > 0 && res.headers.get('Link') ? this.parseLinkHeader(res.headers.get('Link')) : '';
+          const link =
+            totalCount > 0 && res.headers.get('Link')
+              ? this.parseLinkHeader(res.headers.get('Link'))
+              : '';
           console.log(link);
-          const items = res['body']['items'].map(i => this.constructGithubUser(i)) as GitHubUser[];
+          const items = res['body']['items'].map((i) =>
+            this.constructGithubUser(i)
+          ) as GitHubUser[];
           return {
-              users: items,
-              totalResults: totalCount,
-              searchTerm: term,
-              index: this.findCurrentPageIdx(link)
+            users: items,
+            totalResults: totalCount,
+            searchTerm: term,
+            index: this.findCurrentPageIdx(link),
           };
         })
-      ).subscribe(pr => this.pageResultSubject.next(pr));
+      )
+      .subscribe((pr) => {
+        this.pageResultSubject.next(pr);
+        this.resultsCache = {...this.resultsCache, [url]: pr};
+      });
   }
 
   private constructGithubUser(item): GitHubUser {
-      return {
-          login: item.login,
-          avatarUrl: item.avatar_url,
-          htmlUrl: item.html_url
-      };
+    return {
+      login: item.login,
+      avatarUrl: item.avatar_url,
+      htmlUrl: item.html_url,
+    };
   }
 
   private findCurrentPageIdx(link): number {
@@ -54,9 +99,18 @@ export class UserSearchService {
       return 1;
     } else {
       if (link['next']) {
-        return +link['next'].substring(link['next'].indexOf('page=') + 'page='.length) - 1;
-      } else { // last page
-        return +link['prev'].substring(link['prev'].indexOf('page=') + 'page='.length) + 1;
+        return (
+          +link['next'].substring(
+            link['next'].indexOf('page=') + 'page='.length
+          ) - 1
+        );
+      } else {
+        // last page
+        return (
+          +link['prev'].substring(
+            link['prev'].indexOf('page=') + 'page='.length
+          ) + 1
+        );
       }
     }
   }

@@ -35,8 +35,6 @@ export class UserListComponent implements OnInit {
   }
 
   getDifferentPage(event: PageEvent) {
-    console.log(event.pageSize);
-    console.log(event.pageIndex);
     const pageNo = event.pageIndex + 1;
     this.userSearchService.search(this.searchTerm, pageNo.toString());
   }
