@@ -1,5 +1,5 @@
 import { Observable, throwError, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, map, take, share } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GitHubUserProfile } from '../../models/userProfile';
@@ -41,7 +41,8 @@ export class UserProfileService {
           console.log(err);
           return throwError(err);
         }),
-        map((res) => this.constructProfile(res['body']))
+        map((res) => this.constructProfile(res['body'])),
+        share()
       );
     profile$.pipe(take(1)).subscribe((p) => {
       this.profileCache = { ...this.profileCache, [url]: of(p) };
