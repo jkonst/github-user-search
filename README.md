@@ -1,4 +1,10 @@
 # GithubUserSearch
+*Angular app that enables search in Github Users*
+- search for users and see a paginated list of results
+- navigate through the next and previous pages of the paginated results
+- see the total count of search results
+- see notable information for each search result, such as the description, follower count, profile pictures, etc.
+- select a search result and be taken to the applicable page on github.com API
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.4.
 
