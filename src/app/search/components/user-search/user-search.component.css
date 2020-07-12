@@ -31,3 +31,15 @@
     border-bottom: none;
     height: 20px;
 }
+
+.home-wrapper {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.home-wrapper img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
