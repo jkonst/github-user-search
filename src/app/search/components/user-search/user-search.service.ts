@@ -92,18 +92,20 @@ export class UserSearchService {
       return 1;
     } else {
       if (link['next']) {
-        return (
+        const idx = (
           +link['next'].substring(
-            link['next'].indexOf('page=') + 'page='.length
+            link['next'].indexOf('&page=') + '&page='.length
           ) - 1
         );
+        return idx;
       } else {
         // last page
-        return (
+        const idx = (
           +link['prev'].substring(
-            link['prev'].indexOf('page=') + 'page='.length
+            link['prev'].indexOf('&page=') + '&page='.length
           ) + 1
         );
+        return idx;
       }
     }
   }
