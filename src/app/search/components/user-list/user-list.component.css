@@ -20,12 +20,13 @@
 
 mat-table tr:not(.mat-header-row) {
     display: flex;
-    height: 330px;
+    height: 100%;
 }
 
 mat-table td {
     display: flex;
     width: 100%;
+    padding-right: 1px;
 }
 
 .mat-header-cell, .mat-cell {

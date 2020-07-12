@@ -23,6 +23,12 @@
     flex-direction: column;
 }
 
+.description-container label {
+    font-weight: bold;
+    font-size: 1.3vh;
+    margin-bottom: 0.2rem;
+}
+
 .description-container span {
     display: flex;
     text-align: center;
@@ -32,4 +38,20 @@
 .github-pic {
     width: 20vh;
     height: 20vh;
+}
+
+@media screen and (max-width: 500px) {
+    .profile-container {
+        flex-direction: column;
+    }
+    .picture-container {
+        margin: 0 auto;
+    }
+    .github-pic {
+        width: 10vh;
+        height: 10vh;
+    }
+    .description-container {
+        margin-top: 10px;
+    }   
 }

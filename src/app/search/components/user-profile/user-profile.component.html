@@ -3,17 +3,19 @@
         <img class="github-pic" [src]="profile?.avatarUrl">
     </div>
     <div class="description-container">
-        <h5>Bio</h5>
+        <label>Name</label>
+        <span class="name">{{profile.name}}</span>
+        <label>Bio</label>
         <span class="bio">{{!profile.bio || profile.bio === '' ? 'N/A' : profile.bio}}</span>
-        <h5>Followers No</h5>
+        <label>Followers No</label>
         <span class="followers">{{profile.followers}}</span>
-        <h5>Following No</h5>
+        <label>Following No</label>
         <span class="following">{{profile.following}}</span>
-        <h5>Repos No</h5>
+        <label>Repos No</label>
         <span class="repos">{{profile.repos}}</span>
-        <h5>Location</h5>
+        <label>Location</label>
         <span class="location">{{!profile.location || profile.location === '' ? 'N/A' : profile.location}}</span>
-        <h5>Company</h5>
+        <label>Company</label>
         <span class="company">{{!profile.company || profile.company === '' ? 'N/A' : profile.company}}</span>
     </div>
 </div>
