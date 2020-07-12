@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { GitHubUser } from '../../models/user';
 import { PageResult } from '../../models/pageResults';
 import { UserProfileService } from '../user-profile/user-profile.service';
@@ -54,10 +54,6 @@ export class UserSearchService {
         observe: 'response',
       })
       .pipe(
-        catchError((err) => {
-          console.log(err);
-          return throwError(err);
-        }),
         map((res) => {
           const totalCount = res['body']['total_count'];
           const link =
