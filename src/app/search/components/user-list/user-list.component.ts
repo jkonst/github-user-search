@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { GitHubUser } from '../../models/user';
 import { MatTableDataSource } from '@angular/material/table';
 import { PageEvent } from '@angular/material/paginator';
@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css']
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject();
   pageResult$: Observable<PageResult>;
@@ -37,6 +37,11 @@ export class UserListComponent implements OnInit {
   getDifferentPage(event: PageEvent) {
     const pageNo = event.pageIndex + 1;
     this.userSearchService.search(this.searchTerm, pageNo.toString());
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

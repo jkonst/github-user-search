@@ -21,7 +21,17 @@ export class UserSearchService {
   private resultsCache: { [key: string]: PageResult };
 
   constructor(private http: HttpClient, private userProfileService: UserProfileService) {
-    this.resultsCache = {};
+    this.clearCache();
+  }
+
+  init() {
+    this.clearCache();
+    this.pageResultSubject.next({
+      users: [],
+      searchTerm: '',
+      totalResults: 0,
+      index: 0
+    });
   }
 
   search(term: string, pageParam?: string) {
@@ -37,7 +47,7 @@ export class UserSearchService {
   private existsInCache(term: string, url: string): boolean {
     // clear cache when searching different terms
     if (!this.resultsCache[url] && !this.cacheContainsTerm(term)) {
-      this.resultsCache = {};
+      this.clearCache();
       this.userProfileService.clearCache();
     }
     return !!this.resultsCache[url];
@@ -50,31 +60,35 @@ export class UserSearchService {
 
   private makeRequest(term: string, url: string) {
     this.http
-      .get(url, {
-        observe: 'response',
+    .get(url, {
+      observe: 'response',
+    })
+    .pipe(
+      map((res) => {
+        const totalCount = res['body']['total_count'];
+        const link =
+        totalCount > 0 && res.headers.get('Link')
+        ? this.parseLinkHeader(res.headers.get('Link'))
+        : '';
+        const items = res['body']['items'].map((i) =>
+        this.constructGithubUser(i)
+        ) as GitHubUser[];
+        return {
+          users: items,
+          totalResults: totalCount,
+          searchTerm: term,
+          index: this.findCurrentPageIdx(link),
+        };
       })
-      .pipe(
-        map((res) => {
-          const totalCount = res['body']['total_count'];
-          const link =
-            totalCount > 0 && res.headers.get('Link')
-              ? this.parseLinkHeader(res.headers.get('Link'))
-              : '';
-          const items = res['body']['items'].map((i) =>
-            this.constructGithubUser(i)
-          ) as GitHubUser[];
-          return {
-            users: items,
-            totalResults: totalCount,
-            searchTerm: term,
-            index: this.findCurrentPageIdx(link),
-          };
-        })
       )
       .subscribe((pr) => {
         this.pageResultSubject.next(pr);
         this.resultsCache = {...this.resultsCache, [url]: pr};
       });
+    }
+
+  private clearCache() {
+    this.resultsCache = {};
   }
 
   private constructGithubUser(item): GitHubUser {
