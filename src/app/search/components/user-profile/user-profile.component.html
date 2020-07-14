@@ -4,7 +4,7 @@
     </div>
     <div class="description-container">
         <label>Name</label>
-        <span class="name">{{profile.name}}</span>
+        <span class="name">{{!profile.name || profile.name === '' ? 'N/A' : profile.name}}</span>
         <label>Bio</label>
         <span class="bio">{{!profile.bio || profile.bio === '' ? 'N/A' : profile.bio}}</span>
         <label>Followers No</label>
