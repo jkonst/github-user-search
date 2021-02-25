@@ -8,7 +8,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.4.
 
-## Firebase
+## Run
 You can run the latest version of the app on [Firebase](https://github-user-search-d6557.web.app/)
 
 ## Development server
