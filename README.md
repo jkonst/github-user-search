@@ -1,4 +1,4 @@
-# GithubUserSearch
+# Github User Search
 *Angular app that enables search in Github Users*
 - search for users and see a paginated list of results
 - navigate through the next and previous pages of the paginated results
